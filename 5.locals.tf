@@ -12,8 +12,6 @@ variable "last_name" {
   
 }
 
-
-
   locals {
     full_name = "${var.first_name}_${var.last_name}"
   }
