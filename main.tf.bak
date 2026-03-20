@@ -1,0 +1,35 @@
+provider "aws" {
+  region = "ca-central-1"
+  profile = "terralearn"
+}
+
+# resource "aws_instance" "lab_ec2" {
+#   ami = "ami-066ab5c7bf87a3e58"
+#   instance_type = var.listing[1]
+# #   count = 5
+# }
+
+
+
+variable "listing" {
+  type = list(string)
+  default = [ "m5.large", "m5.xlarge" , "t2.medium", "t3.small"]
+}
+
+resource "aws_iam_user" "names" {
+  name = var.listing[count.index]
+  count = length(var.listing)
+}
+
+output "user_names" {
+  value = aws_iam_user.names[*].name
+}
+
+variable "type_ec2" {
+  type = map
+  default = {
+    us-east-1 = "t2.micro"
+    us-west-1 = "t2.nano"
+    ap-south-1 = "t2.small"
+  }
+}

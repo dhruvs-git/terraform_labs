@@ -1,0 +1,24 @@
+provider "aws" {
+    region = var.region
+    profile = "terralearn"
+}
+
+# pkill -9 terraform 
+# (when u get lock thing and nothing works)
+
+resource "aws_iam_user" "db" {
+    name = "dhruv"
+
+}
+
+
+resource "aws_iam_user_policy" "s3_access" {
+  name = "s3-allow-policy"
+  user = aws_iam_user.db.name
+  policy = file("~/Desktop/labs/s3-allow.json")
+}
+
+
+## Base Challenge Code 
+
+

@@ -1,0 +1,17 @@
+provider "aws" {
+  region = var.region
+  profile = "terralearn"
+}
+
+variable "area" {
+  default = "production"
+}
+
+variable "region" {
+  default = "ca-central-1"
+}
+
+resource "aws_instance" "myec2" {
+    ami = "ami-066ab5c7bf87a3e58"
+  instance_type = var.area != "production" ? "t2.micro" : "t3.small"
+}

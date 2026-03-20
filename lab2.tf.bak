@@ -1,0 +1,51 @@
+provider "aws" {
+  region = "ca-central-1"
+  profile = "terralearn"
+}
+
+
+# variable "users" {
+#   type = list(string)
+#   default = [ "adit", "sakshi", "ajay" ]
+# }
+
+# resource "aws_iam_user" "all_user" {
+#   name = var.users[count.index]
+#   count = 1
+# }
+
+# output "user_names" {
+#   value = aws_iam_user.all_user[*].name
+# }
+
+
+resource "aws_instance" "payment_systems" {
+  ami = "ami-066ab5c7bf87a3e58"
+  instance_type = var.instance_types[0]
+  count = 3
+}
+
+resource "aws_instance" "api_system" {
+  ami = "ami-066ab5c7bf87a3e58"
+  instance_type = var.instance_types[1]
+  count = 2
+}
+
+resource "aws_instance" "lambda_ec2s" {
+  ami = "ami-066ab5c7bf87a3e58"
+  instance_type = var.instance_types[2]
+  count = 4
+}
+
+output "ips_payment" {
+    value = aws_instance.payment_systems[*].id
+  
+}
+
+variable "instance_types" {
+
+    type = list(string)
+    default = [ "t2.micro", "t2.small", "t3.micro" ]
+  
+}
+

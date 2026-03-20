@@ -1,0 +1,34 @@
+provider "aws" {
+    region = var.region
+    profile = "terralearn"
+}
+
+variable "region" {
+  default = "ca-central-1"
+}
+
+variable "tags" {
+  type = list
+  default = ["firstec2","secondec2"]
+}
+
+variable "ami" {
+  type = map
+  default = {
+    "ca-central-1" = "ami-066ab5c7bf87a3e58"
+    "us-west-2" = "ami-0b20a6f09484773af"
+    "ap-south-1" = "ami-0e1d06225679bc1c5"
+  }
+}
+
+
+resource "aws_instance" "app-dev" {
+   ami = lookup(var.ami,var.region)
+   instance_type = "t2.micro"
+   count = length(var.tags)
+
+   tags = {
+     Name = element(var.tags,count.index)
+     CreationDate = formatdate("DD MMM YYYY hh:mm ZZZ",timestamp())
+   }
+}
