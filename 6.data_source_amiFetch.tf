@@ -8,13 +8,13 @@ terraform {
 }
 
 provider "aws" {
-    region = "ca-central-1"
-    profile = "terralearn"
+  region  = "ca-central-1"
+  profile = "terralearn"
 }
 
 data "aws_ami" "ami_fetch" {
-  most_recent      = true
-  owners           = ["amazon"]
+  most_recent = true
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
@@ -23,10 +23,10 @@ data "aws_ami" "ami_fetch" {
 }
 
 resource "aws_instance" "myec2" {
-    ami = data.aws_ami.ami_fetch.image_id
-    instance_type = "t3.micro"
+  ami           = data.aws_ami.ami_fetch.image_id
+  instance_type = "t3.micro"
 
-    tags = {
-      Name = "ec2-1"
-    }
+  tags = {
+    Name = "ec2-1"
+  }
 }
