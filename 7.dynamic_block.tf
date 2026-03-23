@@ -1,0 +1,55 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "ca-central-1"
+  profile = "terralearn"
+}
+
+
+data "aws_ami" "ami_fetch" {
+
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+}
+
+resource "aws_instance" "myec2" {
+  ami                    = data.aws_ami.ami_fetch.id
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.sg.id]
+  tags = {
+    Name = "myec2_terraform"
+  }
+
+
+}
+
+variable "security_groups" {
+  type    = list(number)
+  default = [443, 80, 8080]
+}
+
+resource "aws_security_group" "sg" {
+  dynamic "ingress" {
+    for_each = var.security_groups
+
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+}
