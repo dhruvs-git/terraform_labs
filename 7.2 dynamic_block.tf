@@ -12,6 +12,8 @@ provider "aws" {
   profile = "terralearn"
 }
 
+# we will use map variable and now we will 
+# assign different cidr to each ports
 
 data "aws_ami" "ami_fetch" {
 
@@ -24,32 +26,11 @@ data "aws_ami" "ami_fetch" {
   }
 }
 
+
 resource "aws_instance" "myec2" {
   ami                    = data.aws_ami.ami_fetch.id
   instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.sg.id]
   tags = {
     Name = "myec2_terraform"
   }
-
-
-}
-
-variable "security_groups" {
-  type    = list(number)
-  default = [443, 80, 8080]
-}
-
-resource "aws_security_group" "sg" {
-  dynamic "ingress" {
-    for_each = var.security_groups
-
-    content {
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-
 }
