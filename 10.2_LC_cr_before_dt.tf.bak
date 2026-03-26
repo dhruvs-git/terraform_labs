@@ -1,0 +1,26 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "ca-central-1"
+  profile = "terralearn"
+}
+
+/*first I created the instance with ami-066ab5c7bf87a3e58 this AMI
+then i changed the AMI to ami-0534f42902094ab9d */ 
+resource "aws_instance" "myec2" {
+    ami = "ami-066ab5c7bf87a3e58"
+    instance_type = "t3.micro"
+    
+    # now it will create first and then destroy
+    lifecycle {
+      create_before_destroy = true
+     
+    }
+}
