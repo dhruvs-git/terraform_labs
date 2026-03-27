@@ -1,0 +1,21 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "ca-central-1"
+  profile = "terralearn"
+}
+
+variable "db_password" {
+    type = string
+  validation {
+    condition = length(var.db_password) >= 10
+    error_message = "value should be more than 10 letter"
+  }
+}
