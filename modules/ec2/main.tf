@@ -7,11 +7,13 @@ terraform {
   }
 }
 
+/* I am removing this block 
+and putting it into our main config file
+
 provider "aws" {
   region  = "ca-central-1"
   profile = "terralearn"
-}
-
+} */
 
 data "aws_ami" "ami_fetch" {
 
@@ -24,10 +26,11 @@ data "aws_ami" "ami_fetch" {
   }
 }
 
+variable "instance_type" {}
 
 resource "aws_instance" "myec2" {
   ami                    = data.aws_ami.ami_fetch.id
-  instance_type          = "t2.micro"
+  instance_type          = var.instance_type
   tags = {
     Name = "myec2_terraform"
   }
