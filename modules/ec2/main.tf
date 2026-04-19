@@ -27,10 +27,13 @@ data "aws_ami" "ami_fetch" {
 }
 
 variable "instance_type" {}
+variable "vpc_security_group_ids" {
+}
 
 resource "aws_instance" "myec2" {
   ami                    = data.aws_ami.ami_fetch.id
   instance_type          = var.instance_type
+  vpc_security_group_ids = var.vpc_security_group_ids
   tags = {
     Name = "myec2_terraform"
   }
